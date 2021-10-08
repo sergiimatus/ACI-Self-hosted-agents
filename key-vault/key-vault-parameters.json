@@ -11,8 +11,8 @@
         "accessPolicies": {
             "value": [
                 {
-                    "tenantId": "11052a35-7f0f-4891-88bb-a4059564c934",
-                    "objectId": "6615c592-5e1f-4d16-8fa5-1235c49ba934",
+                    "tenantId": "4e9dbbfb-394a-4583-8810-53f81f819e3b",
+                    "objectId": "e07d5e63-7e21-4733-bb71-da21fe2e293c",
                     "permissions": {
                         "keys": [
                             "Get",
@@ -37,8 +37,8 @@
                     }
                 },
                                 {
-                    "tenantId": "11052a35-7f0f-4891-88bb-a4059564c934",
-                    "objectId": "fd9680df-7584-46f0-830d-65ef2942a32a",
+                    "tenantId": "4e9dbbfb-394a-4583-8810-53f81f819e3b",
+                    "objectId": "e07d5e63-7e21-4733-bb71-da21fe2e293c",
                     "permissions": {
                         "keys": [
                             "Get",
@@ -65,7 +65,7 @@
             ]
         },
         "tenant": {
-            "value": "11052a35-7f0f-4891-88bb-a4059564c934"
+            "value": "4e9dbbfb-394a-4583-8810-53f81f819e3b"
         },
         "enabledForDeployment": {
             "value": false
