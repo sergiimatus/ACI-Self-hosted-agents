@@ -5,10 +5,10 @@ trigger: none
 pool: 'Hosted VS2017'
 
 variables:
-  ResourceGroup: 'rg-tyrell-app-001'
-  ServiceConnection: 'Tyrell-MSDN'
-  KeyVaultName: 'kv-tyrell-app-001'
-  acrName: 'acrtyrellapp001' # may contain alpha numeric characters only and must be between 5 and 50 characters
+  ResourceGroup: 'shcscr-cc-rg-vpn-poc'
+  ServiceConnection: 'shcscr-cc-sp-ado'
+  KeyVaultName: 'shcscrccvpnpockv'
+  acrName: 'shcscracrvpnpoc' # may contain alpha numeric characters only and must be between 5 and 50 characters
 
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 # =-=                                               DON't CHANGE ANYTHING BELOW THIS LINE!!                                                     =-=
