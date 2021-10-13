@@ -8,16 +8,16 @@ pool:
 # Only change and fill in the parameters below:
 variables:
   # URL to your Azure DevOps Organization and name of the agent pool. You'll need to create the agent pool yourself first.
-  azdUrl: 'https://dev.azure.com/enecomanagedcloud/'
-  agentPool: 'ACI-Linux'
+  azdUrl: 'https://dev.azure.com/Stryker-HC/'
+  agentPool: 'shcscr-cc-vpn-poc-agentpool'
   # Name of Key Vault where secrets are stored for the Azure Container Registry credentials and its proper URL.
-  ServiceConnection: 'Tyrell-MSDN'
-  ResourceGroup: 'rg-tyrell-app-001'
-  keyVaultName: 'kv-tyrell-app-001'
+  ServiceConnection: 'shcscr-cc-sp-ado'
+  ResourceGroup: 'shcscr-cc-rg-vpn-poc'
+  keyVaultName: 'shcscrccvpnpockv'
   # Name of the Azure Container Registry deployed in the previous pipeline.
-  containerInstanceName: 'aci-tyrell-app-001'
-  acrName: 'acrtyrellapp001'
-  containerRepository: 'adsha-ubuntulinux' # changing this is optional
+  containerInstanceName: 'shcscracrvpnpoc'
+  acrName: 'shcscracrvpnpoc-app1'
+  containerRepository: 'ado-shc-scr-ubuntulinux' # changing this is optional
 
   # Provide the name of your vNet and subnet to which the Azure Container Instance and thus the container agent should be linked.
   # The subnet cannot contain any other resource types. Remove all existing resources from an existing subnet prior to 
