@@ -18,7 +18,7 @@ variables:
 parameters:
 - name: environment
   type: string
-  default: SCR
+  default: scr
 - name: ResourceGroup
   type: string
   default: 'shcscr-cc-rg-vpn-poc'
