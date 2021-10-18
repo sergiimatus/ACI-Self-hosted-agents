@@ -14,43 +14,76 @@ variables:
 # =-=                                               DON't CHANGE ANYTHING BELOW THIS LINE!!                                                     =-=
 # =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
+# Azure Pipeline Template for ML Workspace Resources Deployment
+parameters:
+- name: environment
+  type: string
+  default: SCR
+- name: ResourceGroup
+  type: string
+  default: 'shcscr-cc-rg-vpn-poc'
+- name: ServiceConnection
+  type: string
+  default: 'shcscr-cc-sp-ado'
+- name: KeyVaultName
+  type: string
+  default: 'shcscrccvpnpockv'
+- name: acrName
+  type: string
+  default: 'shcscracrvpnpoc'
+
 jobs:
-- deployment: DeployInfra
-  steps:
+- deployment: DeployADOInfra
+  displayName: Deploy ADO Infra
+  pool:
+    vmImage: ubuntu-16.04
+  environment: ${{ parameters.environment }}
+  variables:
+  - name: resourceGroupName
+    value: ${{ parameters.ResourceGroup }}
+  - name: resourceGroupLocation
+    value: useast2
+  strategy:
+    runOnce:
+      deploy:
+        steps:
+        - download: current
+          artifact: infratemplates
+        - script: ls
+          displayName: 'List dirs'
+          # Deploy Azure Key Vault
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Azure Deployment: Key Vault'
+          inputs:
+            azureSubscription: ${{ parameters.ServiceConnection }}
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: '${{ parameters.ResourceGroup }}'
+            location: '$(resourceGroupLocation)'
+            templateLocation: 'Linked artifact'
+            csmFile: 'key-vault/key-vault-template.json'
+            csmParametersFile: 'key-vault/key-vault-parameters.json'
+            overrideParameters: '-name ${{ parameters.KeyVaultName }}'
+            deploymentMode: 'Incremental'
 
-# Deploy Azure Key Vault
-  - task: AzureResourceGroupDeployment@2
-    displayName: 'Azure Deployment: Key Vault'
-    inputs:
-      azureSubscription: $(ServiceConnection)
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: '$(ResourceGroup)'
-      location: 'West Europe'
-      templateLocation: 'Linked artifact'
-      csmFile: 'key-vault/key-vault-template.json'
-      csmParametersFile: 'key-vault/key-vault-parameters.json'
-      overrideParameters: '-name $(KeyVaultName)'
-      deploymentMode: 'Incremental'
+          # Deploy Azure Container Registry
+        - task: AzureResourceGroupDeployment@2
+          displayName: 'Azure Deployment: Container Registry'
+          inputs:
+            azureSubscription: ${{ parameters.ServiceConnection }}
+            action: 'Create Or Update Resource Group'
+            resourceGroupName: ${{ parameters.ResourceGroup }}
+            location: 'West Europe'
+            templateLocation: 'Linked artifact'
+            csmFile: 'container-registry/container-registry-template.json'
+            csmParametersFile: 'container-registry/container-registry-parameters.json'
+            overrideParameters: '-acrName ${{ parameters.ACRName }}'
+            deploymentMode: 'Incremental'
 
-# Deploy Azure Container Registry
-  - task: AzureResourceGroupDeployment@2
-    displayName: 'Azure Deployment: Container Registry'
-    inputs:
-      azureSubscription: $(ServiceConnection)
-      action: 'Create Or Update Resource Group'
-      resourceGroupName: $(ResourceGroup)
-      location: 'West Europe'
-      templateLocation: 'Linked artifact'
-      csmFile: 'container-registry/container-registry-template.json'
-      csmParametersFile: 'container-registry/container-registry-parameters.json'
-      overrideParameters: '-acrName $(ACRName)'
-      deploymentMode: 'Incremental'
-
-# Store Azure Container Registry credentials in Azure Key Vault
-  - task: AzurePowerShell@4
-    displayName: 'Azure Deployment: Store registry credentials in Key Vault'
-    inputs:
-      azureSubscription: $(ServiceConnection)
-      ScriptType: 'FilePath'
-      ScriptPath: 'powershell-scripts/ContainerRegistryKeyVaultPasswords.ps1'
-      azurePowerShellVersion: 'LatestVersion'
+          # Store Azure Container Registry credentials in Azure Key Vault
+        - task: AzurePowerShell@4
+          displayName: 'Azure Deployment: Store registry credentials in Key Vault'
+          inputs:
+            azureSubscription: ${{ parameters.ServiceConnection }}
+            ScriptType: 'FilePath'
+            ScriptPath: 'powershell-scripts/ContainerRegistryKeyVaultPasswords.ps1'
+            azurePowerShellVersion: 'LatestVersion'
